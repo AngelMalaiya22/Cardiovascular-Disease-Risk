@@ -1,0 +1,123 @@
+{
+  "project": "Cardiovascular Disease Risk Assessment & Prediction Model",
+  "trained_at_utc": "2026-10-16T18:54:08+00:00",
+  "model_name": "Logistic Regression",
+  "best_params": {
+    "C": 0.17054461988472167,
+    "penalty": "l2"
+  },
+  "metrics": {
+    "test_accuracy_before_tuning": 0.8361,
+    "test_accuracy_after_tuning": 0.8689,
+    "cv_accuracy_after_tuning": 0.8464,
+    "all_models": {
+      "Logistic Regression": {
+        "base_test": 0.8361,
+        "base_cv": 0.8298,
+        "tuned_test": 0.8689,
+        "tuned_cv": 0.8464,
+        "best_params": {
+          "C": 0.17054461988472167,
+          "penalty": "l2"
+        }
+      },
+      "SVM": {
+        "base_test": 0.8197,
+        "base_cv": 0.8298,
+        "tuned_test": 0.8361,
+        "tuned_cv": 0.867,
+        "best_params": {
+          "kernel": "linear",
+          "C": 0.013726318898045875
+        }
+      },
+      "KNN": {
+        "base_test": 0.8525,
+        "base_cv": 0.8258,
+        "tuned_test": 0.8197,
+        "tuned_cv": 0.863,
+        "best_params": {
+          "n_neighbors": 14,
+          "weights": "uniform",
+          "p": 1
+        }
+      },
+      "Decision Tree": {
+        "base_test": 0.7541,
+        "base_cv": 0.7553,
+        "tuned_test": 0.7869,
+        "tuned_cv": 0.8093,
+        "best_params": {
+          "criterion": "entropy",
+          "max_depth": 15,
+          "min_samples_split": 2,
+          "min_samples_leaf": 10
+        }
+      },
+      "Random Forest": {
+        "base_test": 0.7869,
+        "base_cv": 0.8299,
+        "tuned_test": 0.7869,
+        "tuned_cv": 0.8548,
+        "best_params": {
+          "n_estimators": 135,
+          "max_depth": 17,
+          "min_samples_split": 20,
+          "min_samples_leaf": 9,
+          "max_features": "sqrt"
+        }
+      }
+    }
+  },
+  "data": {
+    "rows_used": 302,
+    "n_train": 241,
+    "n_test": 61,
+    "positive_class": "1 = heart disease present",
+    "target_recoded": true
+  },
+  "feature_order": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "feature_ranges": {
+    "age": [
+      29.0,
+      77.0
+    ],
+    "trestbps": [
+      94.0,
+      200.0
+    ],
+    "chol": [
+      126.0,
+      564.0
+    ],
+    "thalach": [
+      71.0,
+      202.0
+    ],
+    "oldpeak": [
+      0.0,
+      6.2
+    ]
+  },
+  "versions": {
+    "python": "3.13.7",
+    "scikit_learn": "1.9.1",
+    "pandas": "3.0.6",
+    "numpy": "2.5.4",
+    "joblib": "1.6.0"
+  }
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cardiovascular Disease Risk Assessment</title>
+  <meta name="description" content="Estimate heart disease probability from 13 clinical values with a machine-learning model trained on the Cleveland heart disease dataset. For education and research only.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap">
+      <h1>Cardiovascular Disease<br>Risk Assessment</h1>
+      <p class="lede">Enter 13 clinical values. A machine-learning model trained on the Cleveland heart disease dataset returns an estimated probability of heart disease.</p>
+    </div>
+    <svg class="trace" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path pathLength="1" d="M0 50 H170 l12 -8 l12 8 H300 l10 6 l12 -52 l12 74 l10 -28 H470 l14 -12 l16 12 H640 l10 6 l12 -52 l12 74 l10 -28 H810 l14 -12 l16 12 H980 l10 6 l12 -52 l12 74 l10 -28 H1200"/>
+    </svg>
+  </header>
+
+  <main class="wrap layout">
+    <form id="assessment" class="sheet" novalidate>
+      <div class="examples">
+        <span>Not sure what to enter?</span>
+        <button type="button" class="link" data-example="lower">Fill a lower-risk example</button>
+        <button type="button" class="link" data-example="higher">Fill a higher-risk example</button>
+      </div>
+
+      {% for group in groups %}
+      <fieldset>
+        <legend>{{ group.title }}</legend>
+        <div class="fields">
+          {% for f in group.fields %}
+          <div class="field" data-field="{{ f.name }}">
+            <label for="{{ f.name }}">{{ f.label }}</label>
+            {% if f.kind == 'number' %}
+            <div class="input-unit">
+              <input type="number" id="{{ f.name }}" name="{{ f.name }}" inputmode="decimal"
+                     min="{{ f.min }}" max="{{ f.max }}" step="{{ f.step }}"
+                     placeholder="{{ f.placeholder }}" required aria-describedby="{{ f.name }}-msg">
+              <span class="unit">{{ f.unit }}</span>
+            </div>
+            {% else %}
+            <select id="{{ f.name }}" name="{{ f.name }}" required aria-describedby="{{ f.name }}-msg">
+              <option value="" disabled selected>Choose</option>
+              {% for code, label in f.options %}
+              <option value="{{ code }}">{{ label }}</option>
+              {% endfor %}
+            </select>
+            {% endif %}
+            <p class="msg" id="{{ f.name }}-msg" role="alert"></p>
+          </div>
+          {% endfor %}
+        </div>
+      </fieldset>
+      {% endfor %}
+
+      <div class="actions">
+        <button type="submit" class="primary" id="submit">Estimate risk</button>
+        <button type="reset" class="secondary" id="reset">Clear form</button>
+      </div>
+    </form>
+
+    <aside class="result" aria-live="polite" aria-labelledby="result-title">
+      <h2 id="result-title">Your estimate</h2>
+
+      <div id="state-empty">
+        <p>Fill in every field and choose <strong>Estimate risk</strong>. The result appears here.</p>
+      </div>
+
+      <div id="state-loading" hidden>
+        <p>Calculating…</p>
+      </div>
+
+      <div id="state-error" hidden>
+        <p class="error-text" id="error-text"></p>
+      </div>
+
+      <div id="state-result" hidden>
+        <p class="percent"><span id="percent">0</span><small>%</small></p>
+        <p class="percent-label">estimated probability of heart disease</p>
+        <p class="band" id="band"></p>
+
+        <div class="gauge" id="gauge" role="img" aria-label="Risk position">
+          <div class="zones"><i class="z-low"></i><i class="z-mid"></i><i class="z-high"></i></div>
+          <div class="marker" id="marker"></div>
+          <div class="ticks"><span>0%</span><span id="tick-low"></span><span id="tick-high"></span><span>100%</span></div>
+        </div>
+
+        <p id="band-message"></p>
+        <ul id="warnings" class="warnings"></ul>
+
+        <p class="model-note" id="model-note"></p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="wrap disclaimer">
+    <p><strong>For education and research only.</strong> This tool does not diagnose, treat or rule out any condition, and it is not a substitute for a doctor. The model learned from {{ model.rows_used }} patients in one historical dataset, so its estimates will not generalise to everyone. If you have chest pain, shortness of breath or fainting, contact local emergency services now.</p>
+  </footer>
+
+  <script>
+    window.EXAMPLES = {{ examples | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>

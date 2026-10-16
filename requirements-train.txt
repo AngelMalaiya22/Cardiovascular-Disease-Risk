@@ -1,0 +1,5 @@
+# Everything needed to retrain the model (includes the runtime packages)
+-r requirements.txt
+optuna>=4.0
+matplotlib>=3.8
+seaborn>=0.13
